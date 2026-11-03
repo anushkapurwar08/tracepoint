@@ -1,0 +1,87 @@
+{
+  "_about": "Planted-root-cause scenarios for the Investigator agent. Each case mixes reports with ONE hidden cause into same-area noise with other causes. `must_mention` is the scoring rule: the agent's root_cause + affected_segment must contain at least one term from EVERY group (case-insensitive). The scripted baseline uses the same tools in a fixed order.",
+  "cases": [
+    {
+      "name": "upi_android14",
+      "planted_cause": "UPI payments fail on Android 14 since app update 5.2",
+      "must_mention": [["upi"], ["android 14", "android14"]],
+      "reports": [
+        "UPI payment keeps failing since the last update. Pixel 7, Android 14.",
+        "Can't pay with UPI anymore, it just says payment failed. Android 14 here.",
+        "After updating to 5.2 my UPI payments fail every time. Money not debited though.",
+        "Android 14 user: UPI checkout spins and then errors out. Card works fine.",
+        "Paid via UPI, got payment failed, tried three times. Samsung S23 on Android 14.",
+        "Since version 5.2 UPI does not work at checkout. Switched to card for now.",
+        "UPI intent never opens my GPay app on Android 14, checkout fails.",
+        "UPI broken after update, OnePlus with Android 14. Please fix, I'm about to uninstall.",
+        "Payment failed with UPI on my new phone (Android 14). Older phone works.",
+        "UPI payment error on checkout. Android 14, app 5.2.0.",
+        "Every UPI attempt fails since yesterday's update. Android 14.",
+        "Checkout fails only when I choose UPI. Android 14 Pixel 8."
+      ],
+      "noise": [
+        "My credit card was declined at checkout even though it has balance.",
+        "Got charged twice for my order last week, need a refund.",
+        "Refund for my cancelled order still not received after 7 days.",
+        "Coupon code not applying at checkout, says invalid.",
+        "Wish you supported Apple Pay.",
+        "Checkout page is slow to load during sales.",
+        "Debit card OTP page times out sometimes.",
+        "Net banking option missing for my bank."
+      ]
+    },
+    {
+      "name": "otp_jio",
+      "planted_cause": "Login OTP SMS not delivered to Jio numbers",
+      "must_mention": [["jio"], ["otp", "sms"]],
+      "reports": [
+        "OTP never arrives on my Jio number. My Airtel number gets it instantly.",
+        "Can't log in, no OTP SMS. I'm on Jio.",
+        "Jio user here, OTP not received for 2 days. Locked out of my account.",
+        "Login OTP doesn't come on Jio sim. Tried 5 times.",
+        "No OTP on Jio. My wife's Vi number works fine with the same app.",
+        "OTP SMS missing for login, Jio network, Mumbai.",
+        "Stuck at OTP screen, nothing arrives. Using Jio.",
+        "Jio prepaid: verification code never delivered, can't sign in.",
+        "OTP not coming on Jio number since Monday. Other apps' OTPs arrive fine.",
+        "I'm on Jio and the login OTP is not being delivered at all."
+      ],
+      "noise": [
+        "Keeps logging me out every few hours.",
+        "Password reset email goes to spam.",
+        "Login with Google button does nothing.",
+        "Face ID login option please.",
+        "Account got locked after wrong password attempts, how to unlock?",
+        "Signup asks for too many details.",
+        "OTP takes about 30 seconds sometimes, could be faster."
+      ]
+    },
+    {
+      "name": "samsung_video_crash",
+      "planted_cause": "Video playback crashes on Samsung devices after update 5.2",
+      "must_mention": [["samsung", "galaxy"], ["video", "playback", "player"]],
+      "reports": [
+        "App crashes the moment I play any video. Samsung Galaxy S22.",
+        "Videos crash the app since the update. Galaxy A54.",
+        "Every time I tap a video it closes. Samsung M34, updated to 5.2.",
+        "Video player crashes on my Samsung tablet after latest version.",
+        "Samsung S21 FE: playing a video = instant crash. Started after update.",
+        "Can't watch anything, app crashes on video start. Galaxy S23.",
+        "Crash on video playback, Samsung phone, version 5.2.",
+        "Galaxy user: videos make the app close. My Pixel works fine.",
+        "Video tab crashes every time on my Samsung A14.",
+        "Since 5.2 the app dies when a video starts. Samsung Note 20.",
+        "Samsung Galaxy S24: video crashes the app, very frustrating, uninstalling."
+      ],
+      "noise": [
+        "Videos buffer a lot on mobile data.",
+        "Please add a download option for videos.",
+        "Autoplay videos eat my data.",
+        "Subtitles are out of sync on some videos.",
+        "Feed takes long to load in the morning.",
+        "Video quality drops randomly to 360p.",
+        "App crashed once while opening settings."
+      ]
+    }
+  ]
+}

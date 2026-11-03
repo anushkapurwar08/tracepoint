@@ -1,0 +1,51 @@
+content,source,label_category,label_severity,label_churn
+The app keeps crashing whenever I try to complete payment. I've tried three times and still can't purchase anything.,app_store,bug,5,1
+Payment failed again at checkout but money was debited from my UPI. Please refund or I'm uninstalling.,support,bug,5,1
+Checkout crashes every time I add a card. Can't pay for my order.,app_store,bug,5,1
+Got charged twice for the same subscription this month. Very disappointed.,support,bug,4,1
+Payment page just spins forever and then says error. Tried with two different cards.,web_form,bug,5,0
+"UPI payment fails with an unknown error, had to use another app to buy it.",app_store,bug,4,1
+Refund for a failed transaction still hasn't come after 10 days. Worst experience.,support,bug,4,1
+"Can't log in, the OTP never arrives on my phone.",app_store,bug,5,1
+OTP not received for login since yesterday. I'm locked out of my account.,support,bug,5,1
+Keeps logging me out every few hours and I have to enter OTP again. Annoying.,app_store,bug,3,0
+"Password reset link in the email doesn't work, says token expired immediately.",web_form,bug,4,0
+Login with Google button does nothing on Android 14.,app_store,bug,4,0
+Videos keep buffering even on fast wifi. Other apps play fine.,app_store,performance,3,0
+"Video playback is so slow, constant buffering on the feed. Thinking of switching to another app.",social,performance,3,1
+"The feed takes forever to load in the morning, like 10 seconds.",survey,performance,3,0
+"App drains my battery really fast, 20% in an hour of use.",app_store,performance,3,0
+Scrolling the feed lags a lot on my older phone.,app_store,performance,2,0
+"App is very heavy, freezes for a few seconds when opening stories.",app_store,performance,3,0
+Search results load slowly and sometimes hang.,survey,performance,2,0
+"I can't find where to change my notification settings, it's hidden somewhere.",survey,ux,2,0
+"Settings menu is confusing, too many nested screens.",web_form,ux,2,0
+"Onboarding has too many steps, I almost gave up before finishing setup.",survey,ux,3,1
+The new home screen design is cluttered and hard to read.,social,ux,2,0
+Font is too small in dark mode and the contrast is hard on the eyes.,app_store,ux,2,0
+"It is unclear how to cancel my subscription, the button is hidden.",support,ux,3,1
+"Filter options in search are confusing, I never know what is applied.",survey,ux,2,0
+Please add an option to download videos for offline viewing.,app_store,feature,2,0
+Would love a dark mode schedule that follows sunset.,survey,feature,1,0
+Wish there was a way to save articles to read later.,survey,feature,2,0
+Please add support for Hindi and Tamil languages.,app_store,feature,2,0
+It would be great to have family sharing for the subscription.,web_form,feature,2,0
+Add a feature to mute notifications at night automatically.,survey,feature,1,0
+Should have an option to export my data.,web_form,feature,2,0
+Please add Apple Pay as a payment option.,app_store,feature,2,0
+"Getting way too many notifications, it feels like spam. Going to uninstall if this continues.",app_store,ux,3,1
+"Notifications arrive hours late, useless for live updates.",app_store,bug,3,0
+Push notifications stopped working after the last update.,app_store,bug,3,0
+Profile picture upload fails with an error every time.,app_store,bug,3,0
+My saved settings reset after every update.,web_form,bug,3,0
+"Recommendations are irrelevant, keep showing me the same videos.",survey,other,2,0
+Love the app! Use it every day.,app_store,other,1,0
+"Great update, the new stories are fun.",social,other,1,0
+"Customer support was quick and helpful, thanks.",support,other,1,0
+"Decent app overall, nothing special.",survey,other,1,0
+"Five stars, works perfectly for me.",app_store,other,1,0
+"App crashes on launch after the latest update. Completely unusable, moving to a competitor.",app_store,bug,5,1
+Crashes as soon as I open it on my Samsung. Can't use it at all.,app_store,bug,5,1
+Lost all my saved playlists after the update. Done with this app.,app_store,bug,4,1
+Cancelled my subscription because the app is too slow and buggy.,survey,performance,4,1
+The checkout button is hard to find on the cart page.,web_form,ux,2,0

@@ -1,0 +1,87 @@
+{
+  "name": "SignalOS \u2014 Daily product digest",
+  "nodes": [
+    {
+      "id": "96d3c57e-faf2-4712-9a82-6ad9b4ced3a6",
+      "name": "Every day 18:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c487eb82-d939-4085-a6f3-e0b22cfe1827",
+      "name": "Generate digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/digest",
+        "options": {
+          "timeout": 60000
+        }
+      }
+    },
+    {
+      "id": "ba394947-4144-4eff-a92e-43da1aac9baf",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/REPLACE_ME",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: `*SignalOS daily digest*\\n${$json.content}` }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Every day 18:00": {
+      "main": [
+        [
+          {
+            "node": "Generate digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate digest": {
+      "main": [
+        [
+          {
+            "node": "Post to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

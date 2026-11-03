@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SignalOS</title>
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--ink:#16171a;--muted:#6b6f76;--line:#e4e2dc;--accent:#2f5bea;
+--p0:#c62828;--p1:#e2711d;--p2:#b8930b;--p3:#6b6f76;--ok:#2e7d4f}
+@media (prefers-color-scheme:dark){:root{--bg:#121315;--card:#1b1c1f;--ink:#ececea;--muted:#9a9ea6;--line:#2c2e33;--accent:#7f9cff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line)}
+h1{font-size:18px;margin:0;letter-spacing:-.01em}h1 span{color:var(--muted);font-weight:400}
+.mode{font:12px ui-monospace,monospace;color:var(--muted)}
+main{max-width:1200px;margin:0 auto;padding:20px 24px;display:grid;gap:20px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi,.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.kpi b{display:block;font-size:26px;font-variant-numeric:tabular-nums}.kpi small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}@media(max-width:860px){.grid{grid-template-columns:1fr}}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+textarea{width:100%;min-height:80px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.issue{border-top:1px solid var(--line);padding:12px 0;cursor:pointer}.issue:first-child{border-top:0}
+.issue .t{font-weight:600}.meta{color:var(--muted);font-size:12.5px;display:flex;gap:12px;flex-wrap:wrap;margin-top:2px}
+.pill{display:inline-block;font:600 11px ui-monospace,monospace;padding:2px 7px;border-radius:5px;color:#fff;margin-right:8px}
+.P0{background:var(--p0)}.P1{background:var(--p1)}.P2{background:var(--p2)}.P3{background:var(--p3)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}
+.cat{display:grid;grid-template-columns:90px 1fr 32px;gap:8px;align-items:center;margin:6px 0;font-size:13px}
+.result{font:12.5px ui-monospace,monospace;white-space:pre-wrap;background:var(--bg);border-radius:8px;padding:10px;margin-top:10px}
+.fb{font-size:13px;border-top:1px solid var(--line);padding:8px 0}.fb .meta{font-size:12px}
+.review{color:var(--p1);font-weight:600}.digest{white-space:pre-wrap;font-size:13.5px}
+.filters button{padding:4px 10px;font-size:12px}.filters button.on{background:var(--ink);color:var(--bg)}
+.empty{color:var(--muted);padding:20px 0}
+.inv{margin-left:8px;padding:2px 9px;font-size:11.5px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;z-index:10}
+.overlay.on{display:flex}.modal{background:var(--card);border:1px solid var(--line);border-radius:12px;max-width:760px;width:100%;padding:18px 20px}
+.step{border-left:2px solid var(--line);margin-left:6px;padding:4px 0 10px 14px;position:relative}
+.step:before{content:"";position:absolute;left:-6px;top:9px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.step.rej:before{background:var(--p1)}.step .tool{font:600 12.5px ui-monospace,monospace}
+.step .why{font-size:13px;color:var(--muted);font-style:italic}.step pre{font:11.5px ui-monospace,monospace;white-space:pre-wrap;background:var(--bg);border-radius:6px;padding:6px 8px;margin:4px 0 0;max-height:120px;overflow:auto}
+.brief{background:var(--bg);border-radius:10px;padding:12px 14px;margin-top:12px}.brief li{margin:2px 0}
+</style>
+</head>
+<body>
+<header><h1>SignalOS <span>· product intelligence</span></h1><div class="mode" id="mode">…</div></header>
+<main>
+  <section class="kpis" id="kpis"></section>
+  <div class="grid">
+    <section class="card">
+      <h2>Issues ranked by priority</h2>
+      <div class="row filters" id="filters"></div>
+      <div id="issues"></div>
+    </section>
+    <div style="display:grid;gap:20px;align-content:start">
+      <section class="card">
+        <h2>Submit feedback</h2>
+        <textarea id="fbtext" placeholder="e.g. The app crashes every time I try to pay. Uninstalling."></textarea>
+        <div class="row"><button onclick="submitFb()">Analyse</button>
+          <label class="ghost" style="cursor:pointer;color:var(--accent)">Upload CSV<input type="file" accept=".csv" id="csv" hidden onchange="uploadCsv(this)"></label></div>
+        <div id="result"></div>
+      </section>
+      <section class="card">
+        <h2>Ask your feedback</h2>
+        <textarea id="askq" style="min-height:56px" placeholder="e.g. Why are users churning in payments?"></textarea>
+        <div class="row"><button onclick="ask()">Ask</button></div>
+        <div id="answer"></div>
+      </section>
+      <section class="card"><h2>Feedback by category</h2><div id="cats"></div></section>
+      <section class="card"><h2>Daily digest</h2><div class="digest" id="digest">No digest yet.</div>
+        <div class="row"><button class="ghost" onclick="makeDigest()">Generate now</button><button class="ghost" onclick="reset()">Reset demo data</button></div></section>
+    </div>
+  </div>
+  <section class="card"><h2 id="fbhead">Recent feedback &amp; AI decisions</h2><div id="feedback"></div></section>
+</main>
+<div class="overlay" id="ov" onclick="if(event.target.id==='ov')this.classList.remove('on')"><div class="modal" id="modal"></div></div>
+<script>
+const $=id=>document.getElementById(id);let prio=null;
+const j=(u,o)=>fetch(u,o).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function load(){
+  const [h,s,iss]=await Promise.all([j('/health'),j('/stats'),j('/issues'+(prio?'?priority='+prio:''))]);
+  $('mode').textContent=`jev: ${h.jev} · gemini: ${h.gemini} · embeddings: ${h.embeddings} · db: ${h.database}`;
+  $('kpis').innerHTML=[['Feedback received',s.total_feedback],['Open issues',s.open_issues],['Critical (P0/P1)',s.critical_issues],['Needs human review',s.needs_review],['Avg decision latency',s.avg_latency_ms+' ms']]
+    .map(([k,v])=>`<div class="kpi"><small>${k}</small><b>${v}</b></div>`).join('');
+  $('filters').innerHTML=[null,'P0','P1','P2','P3'].map(p=>`<button class="ghost ${p===prio?'on':''}" onclick="prio=${p?`'${p}'`:null};load()">${p||'All'}</button>`).join('');
+  $('issues').innerHTML=iss.length?iss.map(i=>`<div class="issue" onclick="showFb('${i.id}','${esc(i.title).replace(/'/g,'')}')">
+    <div class="t"><span class="pill ${i.priority}">${i.priority}</span>${esc(i.title)}<button class="ghost inv" onclick="event.stopPropagation();investigate('${i.id}')">Investigate</button></div>
+    <div class="meta"><span>${i.feedback_count} reports</span><span>severity ${i.avg_severity}/5</span><span>churn ${Math.round(i.avg_churn*100)}%</span><span>score ${i.priority_score}</span><span>${i.category} · ${i.product_area}</span>${i.ticket?`<span>🎫 ${esc(i.ticket.team)} (${i.ticket.status})</span>`:''}</div>
+    ${i.summary?`<div class="meta" style="margin-top:4px">${esc(i.summary)}</div>`:''}</div>`).join(''):'<div class="empty">No issues yet. Submit feedback or upload data/sample_feedback.csv.</div>';
+  const tot=Object.values(s.by_category).reduce((a,b)=>a+b,0)||1;
+  $('cats').innerHTML=Object.entries(s.by_category).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div class="cat"><span>${c}</span><div class="bar"><i style="width:${n/tot*100}%"></i></div><span>${n}</span></div>`).join('')||'<div class="empty">—</div>';
+  const d=await j('/digest/latest');if(d)$('digest').textContent=d.content+`\n\n— ${d.model_used}`;
+  showFb();
+}
+async function showFb(issue,title){
+  const f=await j('/feedback?limit=40'+(issue?'&issue_id='+issue:''));
+  $('fbhead').textContent=issue?`Feedback in: ${title}`:'Recent feedback & AI decisions';
+  $('feedback').innerHTML=f.map(x=>{const d=x.decision||{};return `<div class="fb">${esc(x.content)}
+    <div class="meta"><span class="pill ${d.priority}">${d.priority}</span><span>${d.category}${d.category_confidence!=null?` (${Math.round(d.category_confidence*100)}%)`:''}</span><span>${d.product_area}</span><span>sev ${d.severity}</span><span>churn ${Math.round(d.churn_probability*100)}%</span><span>${esc(d.model_used)}</span>${d.needs_review?'<span class="review">needs review</span>':''}</div></div>`}).join('')||'<div class="empty">—</div>';
+}
+async function submitFb(){
+  const c=$('fbtext').value.trim();if(!c)return;
+  $('result').innerHTML='<div class="result">Analysing…</div>';
+  try{const r=await j('/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:c,source:'dashboard'})});
+    const d=r.decision;$('result').innerHTML=`<div class="result">category    ${d.category}\narea        ${d.product_area}\nseverity    ${d.severity}/5\nchurn risk  ${Math.round(d.churn_probability*100)}%\npriority    ${d.priority}\nmodel       ${d.model_used} (${d.latency_ms} ms)${r.issue?`\n\n→ issue: ${r.issue.title} [${r.issue.priority}]\n  ${r.issue.explanation}`:''}</div>`;
+    $('fbtext').value='';load();}catch(e){$('result').innerHTML=`<div class="result">Error: ${e.message}</div>`}
+}
+async function uploadCsv(inp){
+  const fd=new FormData();fd.append('file',inp.files[0]);$('result').innerHTML='<div class="result">Processing CSV…</div>';
+  const r=await j('/feedback/bulk',{method:'POST',body:fd});$('result').innerHTML=`<div class="result">Processed ${r.processed}, failed ${r.failed}</div>`;inp.value='';load();
+}
+async function ask(){
+  const q=$('askq').value.trim();if(!q)return;$('answer').innerHTML='<div class="result">Retrieving…</div>';
+  try{const r=await j('/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});
+    const g=r.grounding;const gl=g?(g.uncited_answer?'⚠ answer has no citations':`${g.valid_citations}/${g.citations} citations verified`+(g.invalid_citations.length?` · invalid: ${g.invalid_citations.join(', ')}`:'')):'';
+    $('answer').innerHTML=`<div class="result" style="font-family:inherit">${esc(r.answer)}</div><div class="meta" style="margin:6px 0">${esc(gl)} · ${esc(r.model_used||'')} · ${esc(r.embedding_model||'')}</div>`+
+      (r.evidence||[]).map(e=>`<div class="fb"><b>[${e.tag}]</b> ${esc(e.content)}<div class="meta"><span>match ${e.score}</span><span>${e.category} · ${e.product_area}</span><span>sev ${e.severity}</span></div></div>`).join('');
+  }catch(e){$('answer').innerHTML=`<div class="result">Error: ${e.message}</div>`}
+}
+async function investigate(id){
+  $('modal').innerHTML='<h2>Investigator agent</h2><div class="result">Investigating… the agent picks its own steps (usually 10–40 s).</div>';$('ov').classList.add('on');
+  try{const r=await j(`/issues/${id}/investigate`,{method:'POST'});const v=r.verification||{};const rep=r.report;
+    const steps=(r.steps||[]).filter(s=>s.tool).map((s,n)=>{const rej=/"(passed": false|error)/.test(s.result);
+      return `<div class="step ${rej?'rej':''}">${s.thought?`<div class="why">${esc(s.thought)}</div>`:''}<div class="tool">${n+1}. ${esc(s.tool)}(${esc(JSON.stringify(s.args||{})).slice(0,160)})</div><pre>${esc(s.result)}</pre></div>`}).join('');
+    $('modal').innerHTML=`<h2>Investigator agent</h2><div class="meta"><span>${esc(r.mode)}</span><span>${esc(r.model)}</span><span>${esc(r.status)}</span><span>${Math.round((r.duration_ms||0)/100)/10}s</span><span>verifier rejections: ${v.verifier_rejections??0}</span><span>fabricated ids caught: ${(v.fabricated_ids_caught||[]).length}</span></div>`+
+    (rep?`<div class="brief"><b>Root cause</b> (${esc(rep.confidence)}): ${esc(rep.root_cause)}<br><b>Affected:</b> ${esc(rep.affected_segment||'—')}<br><b>Jev support:</b> ${v.support_probability??'—'} (${esc(v.verifier||'')})<br><b>Evidence:</b> ${(rep.evidence_ids||[]).map(esc).join(', ')}<br><b>Actions</b><ul>${(rep.recommended_actions||[]).map(a=>`<li>${esc(a)}</li>`).join('')}</ul>${(rep.open_questions||[]).length?`<b>Open questions</b><ul>${rep.open_questions.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:''}</div>`:'<div class="brief">No verified report: the agent could not support a root cause with the evidence.</div>')+
+    `<h2 style="margin-top:16px">Trace</h2>${steps}<div class="row"><button class="ghost" onclick="$('ov').classList.remove('on')">Close</button></div>`;
+  }catch(e){$('modal').innerHTML=`<div class="result">Error: ${e.message}</div>`}
+}
+async function makeDigest(){$('digest').textContent='Generating…';await j('/digest',{method:'POST'});load()}
+async function reset(){if(confirm('Delete all demo data?')){await j('/admin/reset',{method:'POST'});load()}}
+load();
+</script>
+</body>
+</html>
